@@ -12,7 +12,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.ganym8.models.Encounter
 import com.example.ganym8.navigation.Screen
-import com.example.ganym8.ui.components.SexActItem
+import com.example.ganym8.ui.components.EncounterCard
 
 @Composable
 fun MainScreen(sexActs: List<Encounter>, navController: NavController) {
@@ -47,7 +47,7 @@ fun MainScreen(sexActs: List<Encounter>, navController: NavController) {
             // List of Sex Acts
             LazyColumn(modifier = Modifier.fillMaxSize()) {
                 items(sexActs) { sexAct ->
-                    SexActItem(sexAct)  // Use the existing composable
+                    EncounterCard(sexAct)  // Use the existing composable
                 }
             }
         }
