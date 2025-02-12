@@ -6,7 +6,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -17,6 +19,7 @@ import androidx.navigation.NavController
 import com.example.ganym8.models.Activity
 import com.example.ganym8.models.Encounter
 import com.example.ganym8.models.Partner
+import com.example.ganym8.ui.components.ActivitiesDialog
 import com.example.ganym8.ui.components.DatePickerModal
 import com.example.ganym8.ui.components.PartnerCard
 import java.text.SimpleDateFormat
@@ -25,21 +28,45 @@ import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddSexActScreen(navController: NavController, onSave: (Encounter) -> Unit) {
+fun AddNewEncounterScreen(navController: NavController, onSave: (Encounter) -> Unit) {
     var date by remember { mutableStateOf("") }
     var showDatePicker by remember { mutableStateOf(false) }
     var showModal by remember { mutableStateOf(false) }
     var showAddNewPartnerModal by remember { mutableStateOf(false) }
+    var showDropdown by remember { mutableStateOf(false) }
+    var showActivitiesDialog by remember { mutableStateOf(false) }
+    var expanded by remember { mutableStateOf(false) }
+    val options = listOf("Option 1", "Option 2", "Option 3")
+
 
     // Placeholder data for existing partners
-    val existingPartners = remember { listOf("Alice", "Bob", "Charlie") }
+    val existingPartners = remember {
+        listOf(
+            Partner(name = "Ömer", instagram = "meryn"),
+            Partner(name = "Alexander", instagram = "alexr"),
+            Partner(name = "Balázs", instagram = "balazs69")
+        )
+    }
     var selectedPartners by remember { mutableStateOf(listOf<Partner>()) }
+    var selectedPartner by remember { mutableStateOf(existingPartners.first()) }
+
+    val activities = remember {
+        listOf(
+            Activity(name = "blowjob"),
+            Activity(name = "rimming"),
+            Activity(name = "kissing"),
+            Activity(name = "fucking"),
+            Activity(name = "nipple-play")
+        )
+    }
+
+    val selectedActivities = remember { mutableStateOf(mutableListOf<Activity>()) }
+
 
     // Partner and activity states
     var partners by remember { mutableStateOf(listOf<Partner>()) }
-    var newName by remember { mutableStateOf("")}
-    var newInstagram by remember { mutableStateOf("")}
-    var activities by remember { mutableStateOf(listOf<Activity>()) }
+    var newName by remember { mutableStateOf("") }
+    var newInstagram by remember { mutableStateOf("") }
 
     val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
 
@@ -96,6 +123,30 @@ fun AddSexActScreen(navController: NavController, onSave: (Encounter) -> Unit) {
             }
         }
 
+        Button(
+            onClick = { showActivitiesDialog = true },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Icon(Icons.Default.Add, contentDescription = "Add")
+            Spacer(modifier = Modifier.width(8.dp))
+            Text("add activities")
+        }
+
+        Column(modifier = Modifier.padding(16.dp)) {
+            selectedActivities.value.forEach { activity ->
+                Button(
+                    onClick = { },
+                    modifier = Modifier.width(200.dp)
+                ) {
+                    Icon(Icons.Default.ThumbUp, contentDescription = "Add")
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(activity.name)
+                }
+            }
+
+
+
+
         // Save Button (Always at Bottom)
         Button(
             onClick = {
@@ -110,7 +161,6 @@ fun AddSexActScreen(navController: NavController, onSave: (Encounter) -> Unit) {
             Text("Save and Go Back")
         }
     }
-
 
 
     // Date Picker Modal
@@ -157,7 +207,7 @@ fun AddSexActScreen(navController: NavController, onSave: (Encounter) -> Unit) {
 
                     // Add Old Partner Button
                     Button(
-                        onClick = { /* Add new partner logic */ },
+                        onClick = { showDropdown = true },
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         Row(
@@ -216,7 +266,9 @@ fun AddSexActScreen(navController: NavController, onSave: (Encounter) -> Unit) {
 
                     OutlinedTextField(
                         value = newInstagram,
-                        onValueChange = { newText -> newInstagram = newText },  // Update the value here
+                        onValueChange = { newText ->
+                            newInstagram = newText
+                        },  // Update the value here
                         label = { Text("instagram") },
                         modifier = Modifier.fillMaxWidth()
                     )
@@ -229,4 +281,82 @@ fun AddSexActScreen(navController: NavController, onSave: (Encounter) -> Unit) {
         )
     }
 
-}
+    if (showDropdown) {
+        AlertDialog(
+            onDismissRequest = {
+                showModal = false
+                showDropdown = false
+            },
+            confirmButton = {
+                Button(onClick = {
+                    val newPartner =
+                        Partner(name = selectedPartner.name, instagram = selectedPartner.instagram)
+                    selectedPartners = selectedPartners + newPartner  // Add to the list
+                    showModal = false
+                    showDropdown = false
+                    newName = ""
+                    newInstagram = ""
+                }) {
+                    Text("Save")
+                }
+            },
+            dismissButton = {
+                Button(onClick = {
+                    showModal = false
+                    showDropdown = false
+                }) {
+                    Text("Cancel")
+                }
+            },
+            text = {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    ExposedDropdownMenuBox(
+                        expanded = expanded,
+                        onExpandedChange = { expanded = !expanded }
+                    ) {
+                        OutlinedTextField(
+                            value = selectedPartner.name,
+                            onValueChange = {},
+                            readOnly = true,
+                            modifier = Modifier.menuAnchor(),
+                            label = { Text("Select an option") },
+                            trailingIcon = {
+                                Icon(Icons.Default.ArrowDropDown, contentDescription = "Dropdown")
+                            }
+                        )
+
+                        ExposedDropdownMenu(
+                            expanded = expanded,
+                            onDismissRequest = { expanded = false }
+                        ) {
+                            existingPartners.forEach { existingPartner ->
+                                DropdownMenuItem(
+                                    text = { Text(existingPartner.name) },
+                                    onClick = {
+                                        selectedPartner = existingPartner
+                                        expanded = false
+                                    }
+                                )
+                            }
+                        }
+                    }
+
+                }
+            }
+        )
+
+    }
+
+    if (showActivitiesDialog) {
+        ActivitiesDialog(
+            activities = activities,
+            showActivitiesDialog = true,
+            selectedActivities = selectedActivities.value, // Pass the list from parent
+            onUpdateSelectedActivities = { updatedActivities ->
+                // Directly update selectedActivities in the parent
+                selectedActivities.value = updatedActivities.toMutableList()
+            },
+            onDismissDialog = { showActivitiesDialog = false })
+    }}}

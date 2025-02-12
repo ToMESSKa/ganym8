@@ -5,7 +5,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.ganym8.ui.screens.MainScreen
-import com.example.ganym8.ui.screens.AddSexActScreen
+import com.example.ganym8.ui.screens.AddNewEncounterScreen
 import com.example.ganym8.models.Encounter
 
 @Composable
@@ -17,7 +17,7 @@ fun NavGraph(navController: NavHostController, sexActs: List<Encounter>, onAddSe
         }
 
         composable(route = Screen.AddSexActForm.route) {
-            AddSexActScreen(
+            AddNewEncounterScreen(
                 navController,
                 onSave = { sexAct ->
                     onAddSexAct(sexAct)  // Update the list in MainActivity
