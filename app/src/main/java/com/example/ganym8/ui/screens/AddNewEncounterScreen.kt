@@ -1,6 +1,9 @@
 package com.example.ganym8.ui.screens
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.indication
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -25,6 +28,12 @@ import com.example.ganym8.ui.components.PartnerCard
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -76,63 +85,148 @@ fun AddNewEncounterScreen(navController: NavController, onSave: (Encounter) -> U
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(
-            "Add a new encounter",
-            style = MaterialTheme.typography.headlineMedium,
-            modifier = Modifier.padding(top = 32.dp)
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        OutlinedTextField(
-            value = date,
-            onValueChange = {},
-            label = { Text("Date") },
-            readOnly = true,
+        /** 🔹 **Make Everything Scrollable (Except Save Button)** */
+        Column(
             modifier = Modifier
+                .weight(1f) // Ensures this section takes available space and allows scrolling
                 .fillMaxWidth()
-                .clickable { showDatePicker = true },
-            trailingIcon = {
-                IconButton(onClick = { showDatePicker = true }) {
-                    Icon(imageVector = Icons.Default.DateRange, contentDescription = "Select Date")
+                .verticalScroll(rememberScrollState()), // Enables scrolling for overflow
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            /** 🔹 **Title** */
+            Text(
+                "Add a new encounter",
+                style = MaterialTheme.typography.headlineMedium,
+                modifier = Modifier.padding(top = 32.dp)
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            /** 🔹 **Date Section** */
+            Text(
+                "date",
+                style = MaterialTheme.typography.titleMedium, // Bolded title
+                modifier = Modifier.fillMaxWidth(),
+                textAlign = TextAlign.Center
+            )
+            OutlinedTextField(
+                value = date,
+                onValueChange = {},
+                label = { Text("Select Date") },
+                readOnly = true,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable { showDatePicker = true },
+                trailingIcon = {
+                    IconButton(onClick = { showDatePicker = true }) {
+                        Icon(
+                            imageVector = Icons.Default.DateRange,
+                            contentDescription = "Select Date"
+                        )
+                    }
                 }
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            /** 🔹 **Partners Section** */
+            Text(
+                "partners",
+                style = MaterialTheme.typography.titleMedium, // Bolded title
+                modifier = Modifier.fillMaxWidth(),
+                textAlign = TextAlign.Center
+            )
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically, // Center the content vertically
+                horizontalArrangement = Arrangement.Start, // Align the button and text to the end (right)
+                modifier = Modifier.fillMaxWidth() // Ensure the Row takes the full width
+            ) {
+                // Interaction source and indication to disable ripple effect
+                val interactionSource = remember { MutableInteractionSource() }
+
+                // IconButton without ripple effect
+                IconButton(
+                    onClick = { showModal = true },
+                    modifier = Modifier
+                        .size(40.dp)
+                        .background(Color.LightGray, CircleShape)
+                        .clip(CircleShape)
+                        .padding(8.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Add,
+                        contentDescription = "Add",
+                        modifier = Modifier
+                            .size(24.dp)
+                    )
+                }
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = "add partners",
+                    modifier = Modifier
+                        .clickable(
+                            indication = null, // Remove ripple effect on click
+                            interactionSource = interactionSource // Same interaction source to handle click
+                        ) {
+                            showModal = true
+                        }
+                )
             }
-        )
 
-        Spacer(modifier = Modifier.height(8.dp))
 
-        Text("Select Partners or Add New")
 
-        Button(
-            onClick = { showModal = true },
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Icon(Icons.Default.Add, contentDescription = "Add")
-            Spacer(modifier = Modifier.width(8.dp))
-            Text("add partners")
-        }
-
-        // Use weight(1f) so the LazyColumn takes available space but does not push the button out
-        LazyColumn(
-            modifier = Modifier
-                .weight(1f)  // <-- This makes the list take available space but leaves room for the button
-                .fillMaxWidth()
-        ) {
-            items(selectedPartners) { selectedPartner ->
+            selectedPartners.forEach { selectedPartner ->
                 PartnerCard(selectedPartner)
             }
-        }
 
-        Button(
-            onClick = { showActivitiesDialog = true },
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Icon(Icons.Default.Add, contentDescription = "Add")
-            Spacer(modifier = Modifier.width(8.dp))
-            Text("add activities")
-        }
+            Spacer(modifier = Modifier.height(16.dp))
 
-        Column(modifier = Modifier.padding(16.dp)) {
+            /** 🔹 **Activities Section** */
+            Text(
+                "activities",
+                style = MaterialTheme.typography.titleMedium, // Bolded title
+                modifier = Modifier.fillMaxWidth(),
+                textAlign = TextAlign.Center
+            )
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically, // Center the content vertically
+                horizontalArrangement = Arrangement.Start, // Align the button and text to the end (right)
+                modifier = Modifier.fillMaxWidth() // Ensure the Row takes the full width
+            ) {
+                // Interaction source and indication to disable ripple effect
+                val interactionSource = remember { MutableInteractionSource() }
+
+                // IconButton without ripple effect
+                IconButton(
+                    onClick = { showActivitiesDialog = true },
+                    modifier = Modifier
+                        .size(40.dp)
+                        .background(Color.LightGray, CircleShape)
+                        .clip(CircleShape)
+                        .padding(8.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Add,
+                        contentDescription = "Add",
+                        modifier = Modifier
+                            .size(24.dp)
+                    )
+                }
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = "add activities",
+                    modifier = Modifier
+                        .clickable(
+                            indication = null, // Remove ripple effect on click
+                            interactionSource = interactionSource // Same interaction source to handle click
+                        ) {
+                            showActivitiesDialog = true
+                        }
+                )
+            }
+
             selectedActivities.value.forEach { activity ->
                 Button(
                     onClick = { },
@@ -143,11 +237,9 @@ fun AddNewEncounterScreen(navController: NavController, onSave: (Encounter) -> U
                     Text(activity.name)
                 }
             }
+        }
 
-
-
-
-        // Save Button (Always at Bottom)
+        /** 🔹 **Save Button (Always at Bottom, Outside Scrollable Area)** */
         Button(
             onClick = {
                 val encounter = Encounter(date, selectedPartners, activities)
@@ -156,7 +248,7 @@ fun AddNewEncounterScreen(navController: NavController, onSave: (Encounter) -> U
             },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 16.dp)  // Added padding for better visibility
+                .padding(vertical = 16.dp) // Keeps button always visible
         ) {
             Text("Save and Go Back")
         }
@@ -359,4 +451,5 @@ fun AddNewEncounterScreen(navController: NavController, onSave: (Encounter) -> U
                 selectedActivities.value = updatedActivities.toMutableList()
             },
             onDismissDialog = { showActivitiesDialog = false })
-    }}}
+    }
+}
