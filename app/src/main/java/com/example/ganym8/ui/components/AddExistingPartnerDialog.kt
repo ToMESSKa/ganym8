@@ -1,39 +1,39 @@
 package com.example.ganym8.ui.components
 
-import androidx.compose.foundation.background
 import androidx.compose.runtime.Composable
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
-import androidx.compose.ui.graphics.Color
 import androidx.compose.material3.*
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.text.style.TextAlign
 import com.example.ganym8.models.Partner
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddExistingPartnerDialog(onAddPartnerDialogShownChange : (Boolean) -> Unit,
-                             onAddExistingPartnerDialogShownChange : (Boolean) -> Unit,
-                             newName: String,
-                             onNewNameChange : (String) -> Unit,
-                             newInstagram: String,
-                             onNewInstagramChange : (String) -> Unit,
-                             selectedPartners: List<Partner>,
-                             selectedPartner: Partner,
-                             onSelectedPartnersChange: (List<Partner>) -> Unit,
-                             onSelectedPartnerChange: (Partner) -> Unit,
-                             onDropDownExpandedChange: (Boolean) -> Unit,
-                             expanded: Boolean, existingPartners: List<Partner>,
+fun AddExistingPartnerDialog(
+    onAddPartnerDialogShownChange: (Boolean) -> Unit,
+    onAddExistingPartnerDialogShownChange: (Boolean) -> Unit,
+    newName: String,
+    onNewNameChange: (String) -> Unit,
+    newInstagram: String,
+    onNewInstagramChange: (String) -> Unit,
+    selectedPartners: List<Partner>,
+    selectedPartner: Partner,
+    onSelectedPartnersChange: (List<Partner>) -> Unit,
+    onSelectedPartnerChange: (Partner) -> Unit,
+    onDropDownExpandedChange: (Boolean) -> Unit,
+    expanded: Boolean, existingPartners: List<Partner>,
+    newPhoneNumber: String,
+    onNewPhoneNumberChange: (String) -> Unit,
+    newNote: String,
+    onNewNoteChange: (String) -> Unit,
+    newOccupation: String,
+    onNewOccupationChange: (String) -> Unit,
 ) {
     AlertDialog(
         onDismissRequest = {
@@ -42,7 +42,12 @@ fun AddExistingPartnerDialog(onAddPartnerDialogShownChange : (Boolean) -> Unit,
         confirmButton = {
             Button(onClick = {
                 val newPartner =
-                    Partner(name = selectedPartner.name, instagram = selectedPartner.instagram)
+                    Partner(
+                        name = selectedPartner.name, instagram = selectedPartner.instagram,
+                        occupation = selectedPartner.occupation,
+                        phoneNumber = selectedPartner.phoneNumber,
+                        note = selectedPartner.note
+                    )
                 onSelectedPartnersChange(selectedPartners + newPartner)
                 onAddExistingPartnerDialogShownChange(false)
                 onAddPartnerDialogShownChange(false)

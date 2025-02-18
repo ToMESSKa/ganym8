@@ -35,12 +35,27 @@ fun AddNewEncounter(navController: NavController, onSave: (Encounter) -> Unit) {
     var isAddNewPartnerDialogShown by remember { mutableStateOf(false) }
     var showActivitiesDialog by remember { mutableStateOf(false) }
     var expanded by remember { mutableStateOf(false) }
+    var onAddPartnerDialogShownChange by remember { mutableStateOf(false) }
 
     val existingPartners = remember {
         listOf(
-            Partner(name = "Ömer", instagram = "meryn"),
-            Partner(name = "Alexander", instagram = "alexr"),
-            Partner(name = "Balázs", instagram = "balazs69")
+            Partner(
+                name = "Ömer", instagram = "meryn", occupation = "",
+                phoneNumber = "TODO()",
+                note = ""
+            ),
+            Partner(
+                name = "Alexander", instagram = "alexr",
+                occupation = "",
+                phoneNumber = "",
+                note = ""
+            ),
+            Partner(
+                name = "Balázs", instagram = "balazs69",
+                occupation = "",
+                phoneNumber = "",
+                note = ""
+            )
         )
     }
     var selectedPartners by remember { mutableStateOf(listOf<Partner>()) }
@@ -60,6 +75,9 @@ fun AddNewEncounter(navController: NavController, onSave: (Encounter) -> Unit) {
 
     var newName by remember { mutableStateOf("") }
     var newInstagram by remember { mutableStateOf("") }
+    var newOccupation by remember { mutableStateOf("") }
+    var newPhoneNumber by remember { mutableStateOf("") }
+    var newNote by remember { mutableStateOf("") }
 
 
 
@@ -202,6 +220,18 @@ fun AddNewEncounter(navController: NavController, onSave: (Encounter) -> Unit) {
             onSelectedPartnersChange = { partners ->
                 selectedPartners = partners
             },
+            newPhoneNumber = newPhoneNumber,
+            onNewPhoneNumberChange = { phoneNumber ->
+                newPhoneNumber = phoneNumber
+            },
+            newNote = newNote,
+            onNewNoteChange = { note ->
+                newNote = note
+            },
+            newOccupation = newOccupation,
+            onNewOccupationChange = { occupation ->
+                newOccupation = occupation
+            },
         )
     }
 
@@ -231,7 +261,19 @@ fun AddNewEncounter(navController: NavController, onSave: (Encounter) -> Unit) {
                 expanded = isShown
             },
             expanded = expanded,
-            existingPartners = existingPartners
+            existingPartners = existingPartners,
+            newPhoneNumber = newPhoneNumber,
+            onNewPhoneNumberChange = { phoneNumber ->
+                newPhoneNumber = phoneNumber
+            },
+            newNote = newNote,
+            onNewNoteChange = { note ->
+                newNote = note
+            },
+            newOccupation = newOccupation,
+            onNewOccupationChange = { occupation ->
+                newOccupation = occupation
+            },
         )
 
     }

@@ -18,9 +18,11 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
 
                 val sexActs = remember { mutableStateOf(listOf<Encounter>()) }
-                NavGraph(navController = navController, sexActs.value, onAddSexAct = { newAct ->
-                    sexActs.value += newAct  // Correctly update state
-                })
+                NavGraph(
+                    navController = navController, sexActs.value, onAddSexAct = { newAct ->
+                        sexActs.value += newAct  // Correctly update state
+                    }
+                )
             }
         }
     }
