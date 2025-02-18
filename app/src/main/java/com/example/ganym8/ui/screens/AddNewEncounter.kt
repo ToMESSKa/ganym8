@@ -1,5 +1,6 @@
 package com.example.ganym8.ui.screens
 
+import PartnerViewModel
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ThumbUp
@@ -19,14 +20,14 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import com.example.ganym8.ui.components.AddExistingPartnerDialog
 import com.example.ganym8.ui.components.AddItemButton
-import com.example.ganym8.ui.components.AddNewPartnerDialog
 import com.example.ganym8.ui.components.AddPartnerDialog
 import com.example.ganym8.ui.components.DatePicker
 import com.example.ganym8.ui.components.LocationPicker
+import java.time.LocalDate
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddNewEncounter(navController: NavController, onSave: (Encounter) -> Unit) {
+fun AddNewEncounter(navController: NavController, partnerViewModel: PartnerViewModel, onSave: (Encounter) -> Unit) {
     var date by remember { mutableStateOf("") }
     var location by remember { mutableStateOf("Budapest") }
     var isDatePickerDialogShown by remember { mutableStateOf(false) }
@@ -36,29 +37,32 @@ fun AddNewEncounter(navController: NavController, onSave: (Encounter) -> Unit) {
     var showActivitiesDialog by remember { mutableStateOf(false) }
     var expanded by remember { mutableStateOf(false) }
     var onAddPartnerDialogShownChange by remember { mutableStateOf(false) }
+    var selectedPartners = partnerViewModel.getPartners()
 
     val existingPartners = remember {
         listOf(
             Partner(
                 name = "Ömer", instagram = "meryn", occupation = "",
-                phoneNumber = "TODO()",
-                note = ""
+                phoneNumber = "+36309469120",
+                note = "",
+                lastEncounter = LocalDate.now()
             ),
             Partner(
                 name = "Alexander", instagram = "alexr",
                 occupation = "",
                 phoneNumber = "",
-                note = ""
+                note = "",
+                lastEncounter = LocalDate.now()
             ),
             Partner(
                 name = "Balázs", instagram = "balazs69",
                 occupation = "",
                 phoneNumber = "",
-                note = ""
+                note = "",
+                lastEncounter = LocalDate.now()
             )
         )
     }
-    var selectedPartners by remember { mutableStateOf(listOf<Partner>()) }
     var selectedPartner by remember { mutableStateOf(existingPartners.first()) }
 
     val activities = remember {
@@ -78,6 +82,7 @@ fun AddNewEncounter(navController: NavController, onSave: (Encounter) -> Unit) {
     var newOccupation by remember { mutableStateOf("") }
     var newPhoneNumber by remember { mutableStateOf("") }
     var newNote by remember { mutableStateOf("") }
+
 
 
 
@@ -198,42 +203,43 @@ fun AddNewEncounter(navController: NavController, onSave: (Encounter) -> Unit) {
                 isAddExistingPartnerDialogShown = isShown},
             onAddNewPartnerDialogShownChange = { isShown ->
                 isAddNewPartnerDialogShown = isShown},
+            navController= navController
         )
 
     }
 
-    if (isAddNewPartnerDialogShown) {
-        AddNewPartnerDialog(
-            onAddPartnerDialogShownChange = { isShown -> isAddPartnerDialogShown = isShown },
-            onAddNewPartnerDialogShownChange = { isShown ->
-                isAddNewPartnerDialogShown = isShown
-            },
-            newName = newName,
-            onNewNameChange = { name ->
-                newName = name
-            },
-            newInstagram = newInstagram,
-            onNewInstagramChange = { instagram ->
-                newInstagram = instagram
-            },
-            selectedPartners = selectedPartners,
-            onSelectedPartnersChange = { partners ->
-                selectedPartners = partners
-            },
-            newPhoneNumber = newPhoneNumber,
-            onNewPhoneNumberChange = { phoneNumber ->
-                newPhoneNumber = phoneNumber
-            },
-            newNote = newNote,
-            onNewNoteChange = { note ->
-                newNote = note
-            },
-            newOccupation = newOccupation,
-            onNewOccupationChange = { occupation ->
-                newOccupation = occupation
-            },
-        )
-    }
+//    if (isAddNewPartnerDialogShown) {
+//        AddNewPartnerDialog(
+//            onAddPartnerDialogShownChange = { isShown -> isAddPartnerDialogShown = isShown },
+//            onAddNewPartnerDialogShownChange = { isShown ->
+//                isAddNewPartnerDialogShown = isShown
+//            },
+//            newName = newName,
+//            onNewNameChange = { name ->
+//                newName = name
+//            },
+//            newInstagram = newInstagram,
+//            onNewInstagramChange = { instagram ->
+//                newInstagram = instagram
+//            },
+//            selectedPartners = "",
+//            onSelectedPartnersChange = { partners ->
+//                selectedPartners = partners
+//            },
+//            newPhoneNumber = newPhoneNumber,
+//            onNewPhoneNumberChange = { phoneNumber ->
+//                newPhoneNumber = phoneNumber
+//            },
+//            newNote = newNote,
+//            onNewNoteChange = { note ->
+//                newNote = note
+//            },
+//            newOccupation = newOccupation,
+//            onNewOccupationChange = { occupation ->
+//                newOccupation = occupation
+//            },
+//        )
+//    }
 
 
 

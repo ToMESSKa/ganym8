@@ -11,6 +11,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.*
 import androidx.compose.ui.Alignment
 import com.example.ganym8.models.Partner
+import java.time.LocalDate
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -46,7 +47,8 @@ fun AddExistingPartnerDialog(
                         name = selectedPartner.name, instagram = selectedPartner.instagram,
                         occupation = selectedPartner.occupation,
                         phoneNumber = selectedPartner.phoneNumber,
-                        note = selectedPartner.note
+                        note = selectedPartner.note,
+                        lastEncounter = LocalDate.now()
                     )
                 onSelectedPartnersChange(selectedPartners + newPartner)
                 onAddExistingPartnerDialogShownChange(false)

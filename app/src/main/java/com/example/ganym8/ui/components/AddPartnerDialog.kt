@@ -22,7 +22,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import androidx.navigation.NavController
 import com.example.ganym8.R
+import com.example.ganym8.navigation.Screen
 
 
 @Composable
@@ -30,6 +32,7 @@ fun AddPartnerDialog(
     onAddPartnerDialogShownChange: (Boolean) -> Unit,
     onAddExistingPartnerDialogShownChange: (Boolean) -> Unit,
     onAddNewPartnerDialogShownChange: (Boolean) -> Unit,
+    navController: NavController
 ) {
     Dialog(onDismissRequest = { onAddPartnerDialogShownChange(false) }) { // ✅ Use Dialog instead of AlertDialog
         Surface(
@@ -59,7 +62,13 @@ fun AddPartnerDialog(
                     modifier = Modifier.padding(16.dp)
                 ) {
                     Button(
-                        onClick = { onAddNewPartnerDialogShownChange(true) },
+                        onClick = {
+                            // Hide the dialog immediately
+                            onAddPartnerDialogShownChange(false)
+
+                            // Navigate to the new screen immediately
+                            navController.navigate(Screen.AddNewPartnerScreen.route)
+                        },
                         modifier = Modifier.size(120.dp), // Square button
                         shape = RoundedCornerShape(12.dp), // Rounded corners
                         contentPadding = PaddingValues(0.dp),
@@ -92,7 +101,10 @@ fun AddPartnerDialog(
                     }
 
                     Button(
-                        onClick = { onAddExistingPartnerDialogShownChange(true) },
+                        onClick = {
+                            onAddPartnerDialogShownChange(false)
+                            navController.navigate(Screen.AddExistingPartnerScreen.route)
+                        },
                         modifier = Modifier.size(120.dp), // Square button
                         shape = RoundedCornerShape(12.dp), // Rounded corners
                         contentPadding = PaddingValues(0.dp),
