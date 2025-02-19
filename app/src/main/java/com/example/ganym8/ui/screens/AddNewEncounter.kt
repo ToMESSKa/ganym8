@@ -18,7 +18,6 @@ import com.example.ganym8.ui.components.ActivitiesDialog
 import com.example.ganym8.ui.components.PartnerCard
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import com.example.ganym8.ui.components.AddExistingPartnerDialog
 import com.example.ganym8.ui.components.AddItemButton
 import com.example.ganym8.ui.components.AddPartnerDialog
 import com.example.ganym8.ui.components.DatePicker
@@ -242,47 +241,47 @@ fun AddNewEncounter(navController: NavController, partnerViewModel: PartnerViewM
 //    }
 
 
-
-    if (isAddExistingPartnerDialogShown) {
-        AddExistingPartnerDialog(
-            onAddPartnerDialogShownChange = { isShown -> isAddPartnerDialogShown = isShown },
-            onAddExistingPartnerDialogShownChange = { isShown -> isAddExistingPartnerDialogShown = isShown },
-            newName = newName,
-            onNewNameChange = { name ->
-                newName = name
-            },
-            newInstagram = newInstagram,
-            onNewInstagramChange = { instagram ->
-                newInstagram = instagram
-            },
-            selectedPartners = selectedPartners,
-            selectedPartner = selectedPartner,
-            onSelectedPartnersChange = {partners ->
-                selectedPartners = partners
-            },
-            onSelectedPartnerChange = {partner ->
-                selectedPartner = partner
-            },
-            onDropDownExpandedChange = {isShown ->
-                expanded = isShown
-            },
-            expanded = expanded,
-            existingPartners = existingPartners,
-            newPhoneNumber = newPhoneNumber,
-            onNewPhoneNumberChange = { phoneNumber ->
-                newPhoneNumber = phoneNumber
-            },
-            newNote = newNote,
-            onNewNoteChange = { note ->
-                newNote = note
-            },
-            newOccupation = newOccupation,
-            onNewOccupationChange = { occupation ->
-                newOccupation = occupation
-            },
-        )
-
-    }
+//
+//    if (isAddExistingPartnerDialogShown) {
+//        AddExistingPartnerDialog(
+//            onAddPartnerDialogShownChange = { isShown -> isAddPartnerDialogShown = isShown },
+//            onAddExistingPartnerDialogShownChange = { isShown -> isAddExistingPartnerDialogShown = isShown },
+//            newName = newName,
+//            onNewNameChange = { name ->
+//                newName = name
+//            },
+//            newInstagram = newInstagram,
+//            onNewInstagramChange = { instagram ->
+//                newInstagram = instagram
+//            },
+//            selectedPartners = selectedPartners,
+//            selectedPartner = selectedPartner,
+//            onSelectedPartnersChange = {partners ->
+//                selectedPartners = partners
+//            },
+//            onSelectedPartnerChange = {partner ->
+//                selectedPartner = partner
+//            },
+//            onDropDownExpandedChange = {isShown ->
+//                expanded = isShown
+//            },
+//            expanded = expanded,
+//            existingPartners = existingPartners,
+//            newPhoneNumber = newPhoneNumber,
+//            onNewPhoneNumberChange = { phoneNumber ->
+//                newPhoneNumber = phoneNumber
+//            },
+//            newNote = newNote,
+//            onNewNoteChange = { note ->
+//                newNote = note
+//            },
+//            newOccupation = newOccupation,
+//            onNewOccupationChange = { occupation ->
+//                newOccupation = occupation
+//            },
+//        )
+//
+//    }
 
     if (showActivitiesDialog) {
         ActivitiesDialog(

@@ -51,8 +51,10 @@ fun AddExistingPartnerScreen(
         )
     )
 
-    var selectedPartner by remember { mutableStateOf(existingPartners.first()) }
-    var textFieldSize by remember { mutableStateOf(Size.Zero) } // Store TextField size
+    var searchQuery by remember { mutableStateOf("") }
+    var textFieldSize by remember { mutableStateOf(Size.Zero) }
+    var selectedPartner by remember { mutableStateOf<Partner?>(null) }
+
 
     Column(
         modifier = Modifier
@@ -76,8 +78,14 @@ fun AddExistingPartnerScreen(
         Spacer(modifier = Modifier.height(16.dp))
 
         Box {
+
+
             OutlinedTextField(
-                value = selectedPartner.name,
+                value = when {
+                    searchQuery.isNotEmpty() -> searchQuery
+                    selectedPartner != null -> selectedPartner!!.name
+                    else -> "Select an option"  // Ensure this is displayed when nothing is selected
+                },
                 onValueChange = {},
                 readOnly = true,
                 modifier = Modifier
@@ -96,27 +104,74 @@ fun AddExistingPartnerScreen(
                 expanded = expanded,
                 onDismissRequest = { expanded = false },
                 modifier = Modifier
-                    .width(with(LocalDensity.current) { textFieldSize.width.toDp() }) // Set width dynamically
+                    .width(with(LocalDensity.current) { textFieldSize.width.toDp() })
                     .background(Color.White)
+                    .align(Alignment.TopStart) // Ensure it starts below the text field
+                    .padding(top = 8.dp) // Ensure some spac
+                    .heightIn(min = 100.dp) // Ensure the dropdown doesn't shrink too much
             ) {
-                existingPartners.forEach { existingPartner ->
-                    DropdownMenuItem(
-                        text = {
-                            Column {
-                                Text(text = existingPartner.name, style = MaterialTheme.typography.bodyLarge)
-                                Text(text = "instagram: ${existingPartner.instagram}", style = MaterialTheme.typography.bodySmall, color = Color.Gray)
-                                Text(text = "occupation: ${existingPartner.occupation}", style = MaterialTheme.typography.bodySmall, color = Color.Gray)
-                                Spacer(modifier = Modifier.height(8.dp))
-                            }
-                        },
-                        onClick = {
-                            selectedPartner = existingPartner
-                            expanded = false
-                        }
+                TextField(
+                    value = searchQuery,
+                    onValueChange = { searchQuery = it },
+                    placeholder = { Text("Search...") },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp),
+                    singleLine = true,
+                    colors = TextFieldDefaults.colors(
+                        focusedContainerColor = Color.White,
+                        unfocusedContainerColor = Color.White,
+                        disabledContainerColor = Color.White
                     )
+                )
+
+                // Filtered list based on search query
+                val filteredPartners = existingPartners.filter {
+                    it.name.contains(searchQuery, ignoreCase = true) ||
+                            it.instagram.contains(searchQuery, ignoreCase = true) ||
+                            it.occupation.contains(searchQuery, ignoreCase = true)
                 }
+
+                if (filteredPartners.isEmpty()) {
+                    Text(
+                        text = "No results found",
+                        modifier = Modifier.padding(16.dp),
+                        color = Color.Gray
+                    )
+                } else {
+                    filteredPartners.forEach { existingPartner ->
+                        DropdownMenuItem(
+                            text = {
+                                Column {
+                                    Text(text = existingPartner.name, style = MaterialTheme.typography.bodyLarge)
+                                    Text(
+                                        text = "instagram: ${existingPartner.instagram}",
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = Color.Gray
+                                    )
+                                    Text(
+                                        text = "occupation: ${existingPartner.occupation}",
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = Color.Gray
+                                    )
+                                    Spacer(modifier = Modifier.height(8.dp))
+                                }
+                            },
+                            onClick = {
+                                selectedPartner = existingPartner
+                                searchQuery = "" // Clear search query after selection
+                                expanded = false
+                            }
+                        )
+                    }
+                }
+
+                // Spacer to prevent dropdown from moving up under the text field when empty
+                Spacer(modifier = Modifier.height(8.dp))
             }
         }
+
+
 
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -126,7 +181,7 @@ fun AddExistingPartnerScreen(
         ) {
             Button(
                 onClick = {
-                    partnerViewModel.addPartner(selectedPartner)
+                    selectedPartner?.let { partnerViewModel.addPartner(it) }
                     navController.navigateUp()
                 },
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
