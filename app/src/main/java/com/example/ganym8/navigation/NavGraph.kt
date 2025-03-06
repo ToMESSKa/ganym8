@@ -1,5 +1,6 @@
 package com.example.ganym8.navigation
 
+import ActivityViewModel
 import PartnerViewModel
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -9,6 +10,7 @@ import androidx.navigation.compose.composable
 import com.example.ganym8.ui.screens.MainScreen
 import com.example.ganym8.ui.screens.AddNewEncounter
 import com.example.ganym8.models.Encounter
+import com.example.ganym8.ui.screens.AddActivitiesScreen
 import com.example.ganym8.ui.screens.AddExistingPartnerScreen
 import com.example.ganym8.ui.screens.AddNewPartnerScreen
 
@@ -20,6 +22,7 @@ fun NavGraph(
     onAddSexAct: (Encounter) -> Unit
 ) {
     val partnerViewModel: PartnerViewModel = viewModel()
+    val activityViewModel: ActivityViewModel = viewModel()
     NavHost(navController = navController, startDestination = Screen.MainScreen.route) {
 
         composable(route = Screen.MainScreen.route) {
@@ -42,6 +45,9 @@ fun NavGraph(
         composable(route = Screen.AddExistingPartnerScreen.route) {
             AddExistingPartnerScreen(navController, partnerViewModel)
         }
+        composable(route = Screen.AddActivityScreen.route) {
+            AddActivitiesScreen(navController, partnerViewModel, activityViewModel)
+        }
     }
 }
 
@@ -50,5 +56,7 @@ sealed class Screen(val route: String) {
     data object AddSexActForm : Screen("add_sex_act_form")
     data object AddNewPartnerScreen : Screen("add_new_partner_screen")
     data object AddExistingPartnerScreen : Screen("add_existing_partner_screen") // New screen for adding a partner
+    data object AddActivityScreen : Screen("add_activity_screen") // New screen for adding a partner
+
 // New screen for adding a partner
 }

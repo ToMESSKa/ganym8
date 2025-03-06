@@ -14,10 +14,10 @@ import androidx.navigation.NavController
 import com.example.ganym8.models.Activity
 import com.example.ganym8.models.Encounter
 import com.example.ganym8.models.Partner
-import com.example.ganym8.ui.components.ActivitiesDialog
 import com.example.ganym8.ui.components.PartnerCard
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import com.example.ganym8.navigation.Screen
 import com.example.ganym8.ui.components.AddItemButton
 import com.example.ganym8.ui.components.AddPartnerDialog
 import com.example.ganym8.ui.components.DatePicker
@@ -163,7 +163,7 @@ fun AddNewEncounter(navController: NavController, partnerViewModel: PartnerViewM
             )
 
             AddItemButton(
-                onClick = { showActivitiesDialog = true },
+                onClick = { navController.navigate(Screen.AddActivityScreen.route)},
                 buttonText = "add activities"
             )
 
@@ -283,15 +283,15 @@ fun AddNewEncounter(navController: NavController, partnerViewModel: PartnerViewM
 //
 //    }
 
-    if (showActivitiesDialog) {
-        ActivitiesDialog(
-            activities = activities,
-            showActivitiesDialog = true,
-            selectedActivities = selectedActivities.value, // Pass the list from parent
-            onUpdateSelectedActivities = { updatedActivities ->
-                // Directly update selectedActivities in the parent
-                selectedActivities.value = updatedActivities.toMutableList()
-            },
-            onDismissDialog = { showActivitiesDialog = false })
-    }
+//    if (showActivitiesDialog) {
+//        ActivitiesDialog(
+//            activities = activities,
+//            showActivitiesDialog = true,
+//            selectedActivities = selectedActivities.value, // Pass the list from parent
+//            onUpdateSelectedActivities = { updatedActivities ->
+//                // Directly update selectedActivities in the parent
+//                selectedActivities.value = updatedActivities.toMutableList()
+//            },
+//            onDismissDialog = { showActivitiesDialog = false })
+//    }
 }
