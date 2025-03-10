@@ -17,6 +17,7 @@ import com.example.ganym8.models.Partner
 import com.example.ganym8.ui.components.PartnerCard
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import com.example.ganym8.models.ActivityType
 import com.example.ganym8.navigation.Screen
 import com.example.ganym8.ui.components.AddItemButton
 import com.example.ganym8.ui.components.AddPartnerDialog
@@ -62,15 +63,14 @@ fun AddNewEncounter(navController: NavController, partnerViewModel: PartnerViewM
             )
         )
     }
-    var selectedPartner by remember { mutableStateOf(existingPartners.first()) }
 
     val activities = remember {
         listOf(
-            Activity(name = "blowjob"),
-            Activity(name = "rimming"),
-            Activity(name = "kissing"),
-            Activity(name = "fucking"),
-            Activity(name = "nipple-play")
+            ActivityType(name = "blowjob"),
+            ActivityType(name = "rimming"),
+            ActivityType(name = "kissing"),
+            ActivityType(name = "fucking"),
+            ActivityType(name = "nipple-play")
         )
     }
 

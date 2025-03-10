@@ -29,7 +29,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
-
+import com.example.ganym8.navigation.Screen
+import com.example.ganym8.ui.components.AddItemButton
 
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
@@ -41,6 +42,7 @@ fun AddActivitiesScreen(
 ) {
     var searchText by remember { mutableStateOf("") }
     var selectedItems by remember { mutableStateOf<List<String>>(emptyList()) }
+    var isAddPartnerToActivityDialogShown by remember { mutableStateOf(false) }
 
     val favoriteItems = listOf(
         "blowjob", "rimming",
@@ -71,7 +73,6 @@ fun AddActivitiesScreen(
         Column(modifier = Modifier.padding(16.dp)) {
 
             // Row for Selected Items (Always has reserved space)
-            Text("Selected:")
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -93,14 +94,15 @@ fun AddActivitiesScreen(
             Spacer(modifier = Modifier.height(16.dp)) // Space between rows
 
             // Row for Available Items
-            Text("Tap to Select:")
+            Text("favorite activities")
             FlowRow(
                 modifier = Modifier.fillMaxWidth(),
 
             ) {
                 favoriteItems.forEach { item ->
                     AssistChip(
-                        onClick = { selectedItems = selectedItems + item },
+                        onClick = {  isAddPartnerToActivityDialogShown = true
+                            selectedItems = selectedItems + item },
                         label = { Text(item) },
                         modifier = Modifier.padding(end = 8.dp)
                     )
@@ -143,5 +145,14 @@ fun AddActivitiesScreen(
                 }
             }
         }
+    }
+
+    if (isAddPartnerToActivityDialogShown) {
+        AddPartnerToActivity(
+            onAddPartnerToActivityDialogShown = { isShown ->
+                isAddPartnerToActivityDialogShown = isShown
+            },
+            partnerViewModel = partnerViewModel
+        )
     }
 }
